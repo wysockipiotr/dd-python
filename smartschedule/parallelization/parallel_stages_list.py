@@ -14,4 +14,4 @@ class ParallelStagesList:
 
     def add(self, new_parallel_stages: ParallelStages) -> Self:
         result = [*self.all, new_parallel_stages]
-        return ParallelStagesList(result)
+        return ParallelStagesList(all=result)
