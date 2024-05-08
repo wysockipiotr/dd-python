@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "smartschedule"
+version = "0.1.0"
+description = "Domain Drivers Smartschedule"
+authors = ["Piotr Wysocki <hello@piotrwysocki.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+attrs = "^23.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+ruff = "^0.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
