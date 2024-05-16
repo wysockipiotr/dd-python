@@ -1,6 +1,6 @@
 from attrs import frozen
 
-from smartschedule.parallelization.stage import Stage
+from smartschedule.planning.parallelization.stage import Stage
 
 
 @frozen
