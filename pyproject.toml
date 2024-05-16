@@ -12,7 +12,21 @@ attrs = "^23.2.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
 ruff = "^0.4.3"
+pyright = "^1.1.363"
+import-linter = "^2.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = ["I", "W", "E", "F"]
+
+[tool.importlinter]
+root_package = "smartschedule"
+
+[[tool.importlinter.contracts]]
+name = "sorter does not depend on planning"
+type = "forbidden"
+source_modules = ["smartschedule.sorter"]
+forbidden_modules = ["smartschedule.planning"]
