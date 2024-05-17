@@ -1,8 +1,12 @@
+import pytest
+
 from smartschedule.sorter.feedback_arc_set_on_graph import (
     Edge,
     calculate_feedback_arc_set_on_graph,
 )
 from smartschedule.sorter.node import Node
+
+pytestmark = pytest.mark.unit
 
 
 def test_can_find_minimum_number_of_edges_to_remove_to_make_the_graph_acyclic() -> None:

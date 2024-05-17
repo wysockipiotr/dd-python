@@ -25,6 +25,12 @@ select = ["I", "W", "E", "F"]
 [tool.importlinter]
 root_package = "smartschedule"
 
+[tool.pytest.ini_options]
+markers = [
+    "unit: unit tests",
+    "int: integration tests",
+]
+
 [[tool.importlinter.contracts]]
 name = "sorter does not depend on planning"
 type = "forbidden"

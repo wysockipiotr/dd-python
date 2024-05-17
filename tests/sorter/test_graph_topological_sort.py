@@ -1,6 +1,10 @@
+import pytest
+
 from smartschedule.sorter.graph_topological_sort import graph_topological_sort
 from smartschedule.sorter.node import Node
 from smartschedule.sorter.nodes import Nodes
+
+pytestmark = pytest.mark.unit
 
 
 def test_topological_sort_with_simple_dependencies() -> None:

@@ -1,4 +1,8 @@
+import pytest
+
 from smartschedule.planning import ResourceName, Stage, stage_parallelization_of
+
+pytestmark = pytest.mark.unit
 
 LEON = ResourceName("Leon")
 SLAWEK = ResourceName("Sławek")
