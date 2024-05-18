@@ -1,6 +1,6 @@
 from attrs import frozen
 
-from smartschedule.simulation.demand import Demand
+from smartschedule.simulation.demands import Demands
 from smartschedule.simulation.project_id import ProjectId
 
 
@@ -8,4 +8,7 @@ from smartschedule.simulation.project_id import ProjectId
 class SimulatedProject:
     project_id: ProjectId
     earnings: int
-    missing_demands: list[Demand]
+    missing_demands: Demands
+
+    def all_demands_satisfied(self) -> bool:
+        return not self.missing_demands

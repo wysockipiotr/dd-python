@@ -31,7 +31,7 @@ class SimulatedProjectsBuilder:
         return [
             SimulatedProject(
                 project_id=project_id,
-                missing_demands=self._simulated_demands[project_id],
+                missing_demands=tuple(self._simulated_demands[project_id]),
                 earnings=self._simulated_earnings[project_id],
             )
             for project_id in self._simulated_projects
