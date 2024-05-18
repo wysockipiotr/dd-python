@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 attrs = "^23.2.0"
+pendulum = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
@@ -19,8 +20,11 @@ import-linter = "^2.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.ruff]
+line-length = 88
+
 [tool.ruff.lint]
-select = ["I", "W", "E", "F"]
+select = ["I", "W", "E", "F", "PT"]
 
 [tool.importlinter]
 root_package = "smartschedule"
@@ -35,4 +39,4 @@ markers = [
 name = "sorter does not depend on planning"
 type = "forbidden"
 source_modules = ["smartschedule.sorter"]
-forbidden_modules = ["smartschedule.planning"]
+forbidden_modules = ["smartschedule.planning", "smartschedule.simulation"]
