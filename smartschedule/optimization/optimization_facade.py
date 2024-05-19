@@ -1,4 +1,4 @@
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 
 from smartschedule.optimization.capacity_dimension import CapacityDimension
 from smartschedule.optimization.item import Item
@@ -7,8 +7,17 @@ from smartschedule.optimization.total_capacity import TotalCapacity
 from smartschedule.optimization.total_weight import TotalWeight
 
 
+def item_value(item: Item) -> float:
+    return item.value
+
+
 class OptimizationFacade:
-    def calculate(self, items: list[Item], total_capacity: TotalCapacity) -> Result:
+    def calculate(
+        self,
+        items: list[Item],
+        total_capacity: TotalCapacity,
+        item_value_key: Callable[[Item], float] = item_value,
+    ) -> Result:
         capacities_size: int = len(total_capacity)
         dp: list[float] = [0.0] * (capacities_size + 1)
         chosen_items_list: list[list[Item]] = [[] for _ in range(capacities_size + 1)]
@@ -22,7 +31,7 @@ class OptimizationFacade:
         all_capacities = total_capacity.capacities()
         item_to_capacities_map: dict[Item, set[CapacityDimension]] = {}
 
-        for item in sorted(items, key=lambda x: x.value, reverse=True):
+        for item in sorted(items, key=item_value_key, reverse=True):
             chosen_capacities = self._match_capacities(
                 item.total_weight, all_capacities
             )

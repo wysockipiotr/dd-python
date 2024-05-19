@@ -145,3 +145,32 @@ def test_can_simulate_having_extra_resources(
 
     assert result_without_extra_resource.profit == 99
     assert result_with_extra_resource.profit == 108
+
+
+def test_picks_optimal_project_based_on_reputation(
+    simulation: SimulationFacade,
+    simulated_projects_builder: SimulatedProjectsBuilder,
+    available_capacities_builder: AvailableCapacitiesBuilder,
+) -> None:
+    simulated_projects = (
+        simulated_projects_builder.with_project(PROJECT_1)
+        .that_requires(demand_for(skill("JAVA-MID"), JAN_1))
+        .that_can_generate_reputation_loss(100)
+        .with_project(PROJECT_2)
+        .that_requires(demand_for(skill("JAVA-MID"), JAN_1))
+        .that_can_generate_reputation_loss(40)
+        .build()
+    )
+    simulated_availability = (
+        available_capacities_builder.with_employee(STASZEK)
+        .that_brings(skill("JAVA-MID"))
+        .that_is_available_at(JAN_1)
+        .build()
+    )
+
+    result = simulation.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
+        simulated_projects,
+        simulated_availability,
+    )
+
+    assert result.chosen_items[0].name == str(PROJECT_1)

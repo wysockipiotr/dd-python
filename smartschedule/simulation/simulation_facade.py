@@ -20,14 +20,16 @@ class SimulationFacade:
     ) -> Result:
         items = self._to_items(projects_simulations)
         total_capacity = TotalCapacity(total_capability.capabilities)
-        return self.optimization_facade.calculate(items, total_capacity)
+        return self.optimization_facade.calculate(
+            items, total_capacity, lambda item: item.value
+        )
 
     @staticmethod
     def _to_items(projects_simulations: list[SimulatedProject]) -> list[Item]:
         return [
             Item(
                 name=str(project.project_id),
-                value=float(project.earnings),
+                value=float(project.get_value()),
                 total_weight=TotalWeight(project.missing_demands),
             )
             for project in projects_simulations
