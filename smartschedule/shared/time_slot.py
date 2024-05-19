@@ -3,6 +3,9 @@ from typing import Self
 
 import pendulum
 from attrs import frozen
+from zoneinfo import ZoneInfo
+
+UTC = ZoneInfo("UTC")
 
 
 @frozen
@@ -18,10 +21,10 @@ class TimeSlot:
 
     @classmethod
     def create_daily_time_slot_at_utc(cls, year: int, month: int, day: int) -> Self:
-        instant = datetime(year, month, day)
+        instant = datetime(year, month, day, tzinfo=UTC)
         return cls(start=instant, end=instant + timedelta(days=1))
 
     @classmethod
     def create_monthly_time_slot_at_utc(cls, year: int, month: int) -> Self:
-        instant = pendulum.datetime(year, month, 1)
+        instant = pendulum.datetime(year, month, 1, tz=UTC)
         return cls(start=instant, end=instant.add(months=1))

@@ -26,6 +26,11 @@ line-length = 88
 [tool.ruff.lint]
 select = ["I", "W", "E", "F", "PT"]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = [
+    "E501"  # Line too long
+]
+
 [tool.importlinter]
 root_package = "smartschedule"
 
@@ -36,7 +41,31 @@ markers = [
 ]
 
 [[tool.importlinter.contracts]]
-name = "sorter does not depend on planning"
+name = "sorter does not import from forbidden modules"
 type = "forbidden"
 source_modules = ["smartschedule.sorter"]
-forbidden_modules = ["smartschedule.planning", "smartschedule.simulation"]
+forbidden_modules = ["smartschedule.planning", "smartschedule.simulation", "smartschedule.optimization"]
+
+[[tool.importlinter.contracts]]
+name = "optimization does not import from forbidden modules"
+type = "forbidden"
+source_modules = ["smartschedule.optimization"]
+forbidden_modules = ["smartschedule.sorter", "smartschedule.simulation", "smartschedule.planning"]
+
+[[tool.importlinter.contracts]]
+name = "simulation does not import from forbidden modules"
+type = "forbidden"
+source_modules = ["smartschedule.simulation"]
+forbidden_modules = ["smartschedule.sorter", "smartschedule.planning"]
+
+[[tool.importlinter.contracts]]
+name = "shared does not import from forbidden modules"
+type = "forbidden"
+source_modules = ["smartschedule.shared"]
+forbidden_modules = ["smartschedule.sorter", "smartschedule.planning", "smartschedule.simulation", "smartschedule.optimization"]
+
+[[tool.importlinter.contracts]]
+name = "planning does not import from forbidden modules"
+type = "forbidden"
+source_modules = ["smartschedule.planning"]
+forbidden_modules = ["smartschedule.simulation", "smartschedule.optimization"]

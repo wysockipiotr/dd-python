@@ -2,12 +2,13 @@ from uuid import UUID
 
 from attrs import frozen
 
+from smartschedule.optimization.capacity_dimension import CapacityDimension
+from smartschedule.shared import TimeSlot
 from smartschedule.simulation.capability import Capability
-from smartschedule.simulation.time_slot import TimeSlot
 
 
 @frozen
-class AvailableResourceCapability:
+class AvailableResourceCapability(CapacityDimension):
     resource_id: UUID
     capability: Capability
     time_slot: TimeSlot

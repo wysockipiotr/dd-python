@@ -1,6 +1,10 @@
 import uuid
 from typing import Final
 
+import pytest
+
+from smartschedule.optimization.optimization_facade import OptimizationFacade
+from smartschedule.shared.time_slot import TimeSlot
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
@@ -8,9 +12,10 @@ from smartschedule.simulation.capability import Capability
 from smartschedule.simulation.demand import Demand
 from smartschedule.simulation.project_id import project_id
 from smartschedule.simulation.simulation_facade import (
-    which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to,
+    SimulationFacade,
 )
-from smartschedule.simulation.time_slot import TimeSlot
+from tests.simulation.available_capabilities_builder import AvailableCapacitiesBuilder
+from tests.simulation.simulated_projects_builder import SimulatedProjectsBuilder
 
 demand_for = Demand.demand_for
 skill = Capability.skill
@@ -23,8 +28,19 @@ STASZEK: Final = uuid.uuid4()
 LEON: Final = uuid.uuid4()
 
 
+@pytest.fixture()
+def simulation() -> SimulationFacade:
+    optimization_facade = OptimizationFacade()
+    return SimulationFacade(optimization_facade)
+
+
+pytestmark = pytest.mark.unit
+
+
 def test_picks_optimal_project_based_on_earnings(
-    simulated_projects_builder, available_capacities_builder
+    simulated_projects_builder: SimulatedProjectsBuilder,
+    available_capacities_builder: AvailableCapacitiesBuilder,
+    simulation: SimulationFacade,
 ) -> None:
     simulated_projects = (
         simulated_projects_builder.with_project(PROJECT_1)
@@ -49,11 +65,9 @@ def test_picks_optimal_project_based_on_earnings(
         .build()
     )
 
-    result = (
-        which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
-            simulated_projects,
-            simulated_availability,
-        )
+    result = simulation.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
+        simulated_projects,
+        simulated_availability,
     )
 
     assert result.profit == 108
@@ -61,7 +75,9 @@ def test_picks_optimal_project_based_on_earnings(
 
 
 def test_picks_all_when_enough_capabilities(
-    simulated_projects_builder, available_capacities_builder
+    simulated_projects_builder: SimulatedProjectsBuilder,
+    available_capacities_builder: AvailableCapacitiesBuilder,
+    simulation: SimulationFacade,
 ) -> None:
     simulated_projects = (
         simulated_projects_builder.with_project(PROJECT_1)
@@ -80,11 +96,9 @@ def test_picks_all_when_enough_capabilities(
         .build()
     )
 
-    result = (
-        which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
-            simulated_projects,
-            simulated_availability,
-        )
+    result = simulation.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
+        simulated_projects,
+        simulated_availability,
     )
 
     assert result.profit == 99
@@ -92,7 +106,9 @@ def test_picks_all_when_enough_capabilities(
 
 
 def test_can_simulate_having_extra_resources(
-    simulated_projects_builder, available_capacities_builder
+    simulated_projects_builder: SimulatedProjectsBuilder,
+    available_capacities_builder: AvailableCapacitiesBuilder,
+    simulation: SimulationFacade,
 ) -> None:
     simulated_projects = (
         simulated_projects_builder.with_project(PROJECT_1)
@@ -117,18 +133,14 @@ def test_can_simulate_having_extra_resources(
         JAN_1,
     )
 
-    result_without_extra_resource = (
-        which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
-            simulated_projects,
-            simulated_availability,
-        )
+    result_without_extra_resource = simulation.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
+        simulated_projects,
+        simulated_availability,
     )
 
-    result_with_extra_resource = (
-        which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
-            simulated_projects,
-            simulated_availability.add(extra_capability),
-        )
+    result_with_extra_resource = simulation.which_project_with_missing_demands_is_most_profitable_to_allocate_resources_to(
+        simulated_projects,
+        simulated_availability.add(extra_capability),
     )
 
     assert result_without_extra_resource.profit == 99

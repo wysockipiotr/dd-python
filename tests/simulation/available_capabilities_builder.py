@@ -3,12 +3,12 @@ from uuid import UUID
 
 from attrs import field, mutable
 
+from smartschedule.shared.time_slot import TimeSlot
 from smartschedule.simulation.available_resource_capability import (
     AvailableResourceCapability,
 )
 from smartschedule.simulation.capability import Capability
 from smartschedule.simulation.simulated_capabilities import SimulatedCapabilities
-from smartschedule.simulation.time_slot import TimeSlot
 
 
 @mutable
